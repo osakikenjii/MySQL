@@ -116,6 +116,17 @@ insert into tbos
 values
 ('orçamento','aguardando aprovação','higienizacão',110.00,4);
 
+insert into tbos
+(tipo,statusos,serviço,valor,idcli)
+values
+('orçamento','retirado','higienizacão',110.00,5);
+
+insert into tbos
+(tipo,statusos,serviço,valor,idcli)
+values
+('orçamento','retirado','higienizacão',110.00,2);
+
+
 delete from tbos where os=1;
 delete from tbos where os=2;
 delete from tbos where os=3;
@@ -124,3 +135,31 @@ delete from tbos where os=13;
 
 describe tbos;
 select * from tbos;
+
+-- relatorio 1 
+select * from tbos inner join clientes
+on tbos.idcli = clientes.idcli;
+
+
+
+-- relatorio 2
+select
+tbos.dataos,tbos.tipo,tbos.statusos as status_os,tbos.serviço, tbos.valor,
+clientes.nome,clientes.telfixo, clientes.telcel
+from tbos inner join clientes
+on tbos.idcli = clientes.idcli
+where statusos = 'aguardando aprovação';
+
+
+
+-- relatorio 3 
+select
+tbos.os,date_format(tbos.dataos,'%d/%m/%Y - %H:%i') as data_os,
+tbos.dataos, tbos.serviço,tbos.valor,
+clientes.nome as cliente
+from tbos inner join clientes
+on tbos.idcli = clientes.idcli
+where statusos = 'polindo';
+
+-- relatorio 4
+select sum(valor) as faturamento from tbos where statusos = 'retirado';
