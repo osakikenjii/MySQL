@@ -134,19 +134,26 @@ update tbos set statusos='aguardando aprovação' where os = 3;
 update tbos set valor=150.00 where os = 6;
 update tbos set valor=10.00 where os = 7;
 update tbos set serviço='lavagem de motor' where os = 7;
+update tbos set idcli=1 where os = 6;
+update tbos set idcli=2 where os = 7;
 
 select
 tbos.dataos,tbos.tipo,tbos.statusos as status_os,tbos.serviço, tbos.valor,
-clientes.nome,clientes.telfixo, clientes.telcel,clientes.idcli
-from tbos inner join clientes
+clientes.nome,
+clientes.telfixo, 
+clientes.telcel,
+clientes.idcli,
+carros.marca,
+carros.modelo
+from tbos inner join clientes inner join carros
 on tbos.idcli = clientes.idcli
 where statusos = 'aguardando aprovação';
- 
+
 select
 tbos.os,date_format(tbos.dataos,'%d/%m/%Y - %H:%i') as data_os,
 tbos.serviço,tbos.valor,
 clientes.nome as cliente
-from tbos inner join clientes
+from tbos inner join clientes 
 on tbos.idcli = clientes.idcli
 where statusos = 'retirado';
 
