@@ -1,6 +1,6 @@
 /**
 	projeto lava rapido
-        @author: victor kenji e rafael
+	@author: victor kenji e rafael ferreira
 */
 
 create database dblavarapido;
@@ -12,7 +12,9 @@ create table clientes(
 	 telfixo varchar(15) not null,
 	 telcel varchar(15) not null
  );
- 
+  
+drop table clientes;
+  
  describe clientes;
 	alter table clientes modify column telfixo int ;
     alter table clientes modify column telcel int ;
@@ -37,8 +39,6 @@ create table clientes(
  
  select*from clientes;
  
- 
- 
  create table carros(
 	 idcar  int primary key auto_increment,
 	 marca varchar(50) not null,
@@ -48,12 +48,9 @@ create table clientes(
 	 anofab varchar(50) not null,
 	 km varchar(100) not null
 );
+
 describe carros;
 select*from carros;
-
-	
--- deletar uma coluna 
-	alter table carros drop column anofab;
     
  -- crud
 	 insert into carros (marca,modelo,placa,cor,km,anofab)
@@ -96,70 +93,61 @@ create table tbos (
     foreign key(idcli) references clientes(idcli)	
 );
 
-insert into tbos
-(tipo,statusos,serviço,valor,idcli)
+-- data de saida date not null 
+
+insert into tbos(tipo,statusos,serviço,valor,idcli)
 values
 ('serviço','lavando','lavagem simples',10.00,1);
-insert into tbos
 
-(tipo,statusos,serviço,valor,idcli)
+insert into tbos(tipo,statusos,serviço,valor,idcli)
 values
 ('serviço','polindo','polimento',150.00,2);
 
-insert into tbos
-(tipo,statusos,serviço,valor,idcli)
+insert into tbos(tipo,statusos,serviço,valor,idcli)
 values
 ('orçamento','valando','lavagem completa',30.00,2);
 
-insert into tbos
-(tipo,statusos,serviço,valor,idcli)
-values
-('orçamento','aguardando aprovação','higienizacão',110.00,4);
+insert into tbos(tipo,statusos,serviço,valor,idcli)
+values('orçamento','aguardando aprovação','higienizacão',110.00,4);
 
-insert into tbos
-(tipo,statusos,serviço,valor,idcli)
+insert into tbos(tipo,statusos,serviço,valor,idcli)
 values
-('orçamento','retirado','higienizacão',110.00,5);
+('serviço','retirado','higienizacão',110.00,5);
 
-insert into tbos
-(tipo,statusos,serviço,valor,idcli)
+insert into tbos(tipo,statusos,serviço,valor,idcli)
 values
-('orçamento','retirado','higienizacão',110.00,2);
+('serviço','retirado','polimento',150.00,5);
 
+insert into tbos(tipo,statusos,serviço,valor,idcli)
+values
+('serviço','retirado','levagem simples',10.00,5);
 
 delete from tbos where os=1;
 delete from tbos where os=2;
-delete from tbos where os=3;
-delete from tbos where os=12;
-delete from tbos where os=13;
 
 describe tbos;
 select * from tbos;
 
--- relatorio 1 
-select * from tbos inner join clientes
-on tbos.idcli = clientes.idcli;
+update tbos set statusos='lavando' where os = 8;
+update tbos set statusos='lavando' where os = 3;
+update tbos set statusos='aguardando aprovação' where os = 3;
+update tbos set valor=150.00 where os = 6;
+update tbos set valor=10.00 where os = 7;
+update tbos set serviço='lavagem de motor' where os = 7;
 
-
-
--- relatorio 2
 select
 tbos.dataos,tbos.tipo,tbos.statusos as status_os,tbos.serviço, tbos.valor,
-clientes.nome,clientes.telfixo, clientes.telcel
+clientes.nome,clientes.telfixo, clientes.telcel,clientes.idcli
 from tbos inner join clientes
 on tbos.idcli = clientes.idcli
 where statusos = 'aguardando aprovação';
-
-
-
--- relatorio 3 
+ 
 select
 tbos.os,date_format(tbos.dataos,'%d/%m/%Y - %H:%i') as data_os,
-tbos.dataos, tbos.serviço,tbos.valor,
+tbos.serviço,tbos.valor,
 clientes.nome as cliente
 from tbos inner join clientes
 on tbos.idcli = clientes.idcli
-where statusos = 'polindo';
+where statusos = 'retirado';
 
--- relatorio 4
 select sum(valor) as faturamento from tbos where statusos = 'retirado';
