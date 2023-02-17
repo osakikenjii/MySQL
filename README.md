@@ -1,4 +1,4 @@
 # mysql
-projetos bancos de dados
+projetos de bancos de dados
 # Autor
 victor kenji
